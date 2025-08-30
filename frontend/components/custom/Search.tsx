@@ -1,15 +1,13 @@
-import React, { useState } from "react";
 import { Box } from "@/components/ui/box";
-import { Input } from "@/components/ui/input";
-import { Icon } from "@/components/ui/icon";
 import { Pressable } from "@/components/ui/pressable";
 import { MaterialIcons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import { TextInput } from "react-native";
 
 export default function SearchBar({
   onSearch,
 }: {
-  onSearch: (text: string) => void;
+    onSearch: (text: string) => void;
 }) {
   const [query, setQuery] = useState("");
 

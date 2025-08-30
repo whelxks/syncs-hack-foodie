@@ -12,6 +12,20 @@ export const Category = {
 
 export type Category = (typeof Category)[keyof typeof Category]
 
+// map category to colours
+export const CategoryColour = {
+  [Category.ELECTRONICS] : "red",
+  [Category.FASHION] : "blue",
+  [Category.FOOD_AND_DRINKS] : "green",
+  [Category.FURNITURE] : "orange",
+  [Category.EDUCATION] : "purple",
+  [Category.OTHERS] : "yellow",
+} as const
+
+export type CategoryColour = (typeof CategoryColour)[keyof typeof CategoryColour]
+
+
+
 export const Condition = {
   NEW : "New",
   WELL_USED : "Well Used",
