@@ -19,7 +19,6 @@ import { useLocalSearchParams } from "expo-router";
 import { createRef, useEffect, useRef, useState } from "react";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import MapView, {
-  AnimatedRegion,
   Callout,
   Circle,
   Marker,
@@ -53,7 +52,6 @@ const MarkerComponent = (
       anchor={{ x: 0.5, y: 1 }}
     >
       <Callout
-        className="flex relative"
         tooltip={false}
         onPress={() => console.log("vieew more details???")}
       >
@@ -98,15 +96,6 @@ export default function ReceiveScreen() {
   const [itemArr, setItemArr] = useState<ItemSchema[]>([]);
   const initialItemsRef = useRef<ItemSchema[]>([]);
 
-  const [value, setValue] = useState(
-    new AnimatedRegion({
-      latitude: latNum,
-      longitude: longNum,
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGITUDE_DELTA,
-    })
-  );
-
   useEffect(() => {
     const ini = [
       {
@@ -146,13 +135,6 @@ export default function ReceiveScreen() {
     initialItemsRef.current = ini; // permanent copy
     setItemArr(ini);
   }, [latNum, longNum]);
-
-  useEffect(() => {
-    console.log(
-      "Rendering markers:",
-      itemArr.map((m) => m.id)
-    );
-  }, [itemArr]);
 
   const onSearch = (str: string) => {
     if (!str.trim()) {
@@ -252,19 +234,29 @@ export default function ReceiveScreen() {
         </Slider>
         <Text className="text-[#646464] text-xl font-bold">{radius}m</Text>
       </Center>
-      ;
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <HStack
-          space="md"
-          reversed={false}
-          className="absolute top-30 left-5 right-5"
-        >
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        className="absolute top-[220] left-5 right-5 h-fit"
+  
+      >
+        {/* <Text className="text-lg text-black font-bold">Categories:</Text> */}
+        <HStack space="md">
           {Object.values(Category).map((category) => (
             <Box
-              className={`text-sm bg-${CategoryColour[category]} p-3 rounded-full`}
               key={category}
+              className="p-3 rounded-full"
+              style={{
+                backgroundColor: CategoryColour[category],
+                paddingHorizontal: 16, // horizontal padding for pill shape
+                paddingVertical: 8, // vertical padding
+                borderRadius: 999, // large radius makes it fully rounded
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              <Text className="text-white font-medium">{category}</Text>
+              <Text className="text-white font-bold">{category}</Text>
             </Box>
           ))}
         </HStack>

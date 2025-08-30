@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { VStack } from "@/components/ui/vstack";
-import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
+import { LinkText } from "@/components/ui/link";
+import { Text } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
 import * as Location from "expo-location";
-import GoogleSignIn from "@/components/GoogleSignIn";
-import { Link, LinkText } from "@/components/ui/link";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import {
+  Linking,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { isValidCoordinates } from "../functions/map";
 
 export default function IndexScreen() {
@@ -59,10 +58,8 @@ export default function IndexScreen() {
             </Text>
           </VStack>
 
-
           <Text>{location?.coords.latitude ?? ""} </Text>
           <Text> {location?.coords.longitude ?? ""}</Text>
-          
 
           {!!errorMsg && (
             <Center className="gap-2">
@@ -73,9 +70,9 @@ export default function IndexScreen() {
             </Center>
           )}
 
-        <GoogleSignIn />
-          
-<!--      <Button
+          {/* <GoogleSignIn /> */}
+
+          <Button
             size="lg"
             className="w-full bg-blue-600 rounded-xl 
             disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
@@ -85,8 +82,7 @@ export default function IndexScreen() {
             disabled={!!errorMsg}
           >
             <ButtonText>Login</ButtonText>
-          </Button> -->
-
+          </Button>
         </VStack>
       </Center>
     </SafeAreaView>
