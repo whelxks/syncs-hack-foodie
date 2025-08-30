@@ -2,8 +2,6 @@ export const LOCAL_MACHINE_CONFIG = {
   BASE_URL: 'http://10.16.230.79:3008',
 }
 
-
-
 export const getPreSignedUrl = async ({bucket, key}: {bucket: string, key: string}) => {
   const response = await fetch(`${LOCAL_MACHINE_CONFIG.BASE_URL}/upload?bucket=${bucket}&key=${key}`);
 
