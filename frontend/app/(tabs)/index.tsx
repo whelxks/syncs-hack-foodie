@@ -1,45 +1,30 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import MapView from "react-native-maps";
+import { StyleSheet, View } from "react-native";
+import { kMToLongitudes } from "../functions/map";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { Box } from '@/components/ui/box';
-import { Text } from '@/components/ui/text';
-
-export default function HomeScreen() {
+export default function ReceiveScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-       <Box className="bg-foodie-y-500 p-5">
-      <Text className="text-typography-0">This is the Box</Text>
-    </Box>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          // reference from: https://stackoverflow.com/questions/36685372/how-to-zoom-in-out-in-react-native-map/36688156#36688156
+          latitudeDelta: 0.00001, // any number significantly smaller than longitudeDelta
+          longitudeDelta: kMToLongitudes(1.0, 51.588491), // 1 km radius from ur location
+        }}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  map: {
+    width: "100%",
+    height: "100%",
   },
 });
