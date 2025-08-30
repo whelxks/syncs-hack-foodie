@@ -96,16 +96,12 @@ export default function ReceiveScreen() {
       return;
     }
 
-    const strUpperCase = str.toUpperCase();
-    const filteredItems = initialItemsRef.current.filter((item) =>
-      item.title.toUpperCase().includes(strUpperCase)
-    );
+    // const strUpperCase = str.toUpperCase();
+    // const filteredItems = initialItemsRef.current.filter((item) =>
+    //   item.title.toUpperCase().includes(strUpperCase)
+    // );
 
-    setItemArr(() => filteredItems);
-  };
-
-  const onRegionChange = (region: AnimatedRegion) => {
-    console.log(region);
+    // setItemArr(() => filteredItems);
   };
 
   return (
@@ -129,6 +125,7 @@ export default function ReceiveScreen() {
             key={marker.id}
             // id={marker.id}
             // identifier={marker.id}
+            pinColor="blue"
             coordinate={{
               latitude: marker.location.lat,
               longitude: marker.location.long,
