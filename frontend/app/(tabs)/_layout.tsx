@@ -2,7 +2,6 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { View, Text, Platform } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 import { HapticTab } from '@/components/HapticTab';
 import TabBarBackground from '@/components/ui/TabBarBackground';
@@ -17,9 +16,9 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarShowLabel: false, // hide default labels, we’ll add custom ones
+        tabBarShowLabel: false, 
         tabBarStyle: {
-          height: 85, // make room for icons + labels
+          height: 85,
           paddingTop: 8,
           paddingBottom: 6,
           ...Platform.select({
@@ -31,7 +30,7 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
       }}
     >
-      {/* LEFT TAB → Give */}
+      {/*Give*/}
       <Tabs.Screen
         name="index"
         options={{
@@ -57,7 +56,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* MIDDLE TAB → Profile */}
+      {/*Profile*/}
       <Tabs.Screen
         name="profile"
         options={{
@@ -83,7 +82,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* RIGHT TAB → Receive */}
+      {/*Receive*/}
       <Tabs.Screen
         name="explore"
         options={{
