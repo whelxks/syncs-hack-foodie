@@ -18,7 +18,7 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-       <Box className="foodie-y-500 p-5">
+       <Box className="bg-foodie-y-500 p-5">
       <Text className="text-typography-0">This is the Box</Text>
     </Box>
     </ParallaxScrollView>
