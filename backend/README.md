@@ -1,10 +1,11 @@
 ## QuickStart
-The backend is hosted on local machine connected to usyd WiFi.
+The backend is hosted on local machine connected to usyd WiFi.<br>
+Configure the client to hit the private IP and port 3008.
 
 ## API Repository
 
 ### /upload GET
-Mobile client request for presigned url to upload image.
+API to request for presigned url to upload image.
 
 <b>Request Structure</b>
 | Parameter | Required | Type
@@ -12,8 +13,8 @@ Mobile client request for presigned url to upload image.
 | bucket | required | string
 | key | required | string
 
-### /foodItems GET
-OCR receipt image and parse through Gemini to get the array of food items on the receipt.
+### /itemModel GET
+API to prefill the item form from image
 
 <b>Request Structure</b>
 | Parameter | Required | Type
@@ -24,4 +25,7 @@ OCR receipt image and parse through Gemini to get the array of food items on the
 <b>Response Structure</b>
 | Field | Type
 | :-- | :--
-| foodItems | List[string]
+| title | string
+| category | Literal['Electronics', 'Fashion', 'Food & Drinks', 'Furniture', 'Education', 'Others']
+| condition | Literal['new', 'well_used', 'heavy used']
+| description | string

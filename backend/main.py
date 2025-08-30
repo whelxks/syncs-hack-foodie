@@ -6,14 +6,14 @@ import logging
 from fastapi import FastAPI
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from ocr_pipeline import OCRPipeline
+from item_pipeline import ItemPipeline
 
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-OCR_PIPELINE = OCRPipeline(model="gemini-2.5-flash")
+ITEM_PIPELINE = ItemPipeline(model="gemini-2.5-flash", api_key=os.environ.get("GEMINI_API_KEY"))
 S3_CLIENT = boto3.client(
   's3',
   region_name = "ap-southeast-2",
@@ -50,17 +50,14 @@ def get_presigned_url(bucket: str, key: str):
   }
 
 
+@app.get("/itemModel")
+def get_food_items(bucket: str, key: str):
+  """ Upload image to Gemini to get structured output """
 
-@app.get("/foodItems")
-def get_food_items(req: ObjectPath):
-  """ Download the image from S3 & Run OCR Pipeline """
+  file_ext = key.split("/")[-1].split(".")[-1]
+  file_ext = "jpeg" if file_ext == "jpg" else file_ext
 
-  start = time.time()
   #? Body is a streamingbody
-  img_bytes: bytes = S3_CLIENT.get_object(Bucket=req.bucket, Key=req.key)['Body'].read()
-  end = time.time()
-  logger.info(f"S3 Get Object: {end - start:4.f} seconds")
+  img_bytes: bytes = S3_CLIENT.get_object(Bucket=bucket, Key=key)['Body'].read()
 
-  return {
-    "foodItems": OCR_PIPELINE.get_food_items(img_bytes)
-  }
+  return ITEM_PIPELINE.get_item_model(img_bytes, ext = file_ext)
