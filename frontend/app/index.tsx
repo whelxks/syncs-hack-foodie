@@ -7,6 +7,7 @@ import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
 import * as Location from "expo-location";
+import GoogleSignIn from "@/components/GoogleSignIn";
 
 export default function IndexScreen() {
   const router = useRouter();
@@ -46,20 +47,8 @@ export default function IndexScreen() {
           </VStack>
 
           <Text>{location?.coords.latitude ?? ""} </Text>
-
           <Text> {location?.coords.longitude ?? ""}</Text>
-
-          <Button
-            size="lg"
-            className="w-full bg-blue-600 rounded-xl 
-            disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
-  hover:bg-blue-700 disabled:hover:bg-gray-300
-  "
-            onPress={handleLogin}
-            disabled={!!errorMsg}
-          >
-            <Text className="text-white">Login</Text>
-          </Button>
+          <GoogleSignIn />
         </VStack>
       </Center>
     </SafeAreaView>
