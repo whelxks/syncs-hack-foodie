@@ -5,18 +5,13 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/HapticTab';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarShowLabel: false, 
+        tabBarShowLabel: false,
         tabBarStyle: {
           height: 85,
           paddingTop: 8,
@@ -30,24 +25,19 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
       }}
     >
-      {/*Give*/}
+      {/* Give */}
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
+          tabBarIcon: ({ focused, size }: { focused: boolean; size: number }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Ionicons
                 name={focused ? 'heart' : 'heart-outline'}
                 size={(size ?? 28) + 6}
-                color={color as string}
+                className="text-foodie-y-500"
               />
               <Text
-                style={{
-                  color,
-                  fontSize: 12,
-                  marginTop: 4,
-                  fontWeight: focused ? '700' : '500',
-                }}
+                className={`mt-1 text-xs ${focused ? 'font-bold text-foodie-y-500' : 'font-medium text-foodie-y-500'}`}
               >
                 Give
               </Text>
@@ -56,24 +46,19 @@ export default function TabLayout() {
         }}
       />
 
-      {/*Profile*/}
+      {/* Profile */}
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
+          tabBarIcon: ({ focused, size }: { focused: boolean; size: number }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Ionicons
                 name={focused ? 'person' : 'person-outline'}
                 size={(size ?? 28) + 6}
-                color={color as string}
+                className="text-foodie-y-500"
               />
               <Text
-                style={{
-                  color,
-                  fontSize: 12,
-                  marginTop: 4,
-                  fontWeight: focused ? '700' : '500',
-                }}
+                className={`mt-1 text-xs ${focused ? 'font-bold text-foodie-y-500' : 'font-medium text-foodie-y-500'}`}
               >
                 Profile
               </Text>
@@ -82,24 +67,19 @@ export default function TabLayout() {
         }}
       />
 
-      {/*Receive*/}
+      {/* Receive */}
       <Tabs.Screen
         name="explore"
         options={{
-          tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
+          tabBarIcon: ({ focused, size }: { focused: boolean; size: number }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <FontAwesome5
                 name="hands"
                 size={(size ?? 28) + 6}
-                color={color as string}
+                className="text-foodie-y-500"
               />
               <Text
-                style={{
-                  color,
-                  fontSize: 12,
-                  marginTop: 4,
-                  fontWeight: focused ? '700' : '500',
-                }}
+                className={`mt-1 text-xs ${focused ? 'font-bold text-foodie-y-500' : 'font-medium text-foodie-y-500'}`}
               >
                 Receive
               </Text>
@@ -110,6 +90,11 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+
+
+
+
 
 
 
