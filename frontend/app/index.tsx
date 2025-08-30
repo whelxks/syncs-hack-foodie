@@ -52,14 +52,20 @@ export default function IndexScreen() {
       <Center className="flex-1">
         <VStack className="w-full max-w-sm px-6 gap-8 items-center">
           <VStack className="gap-2 items-center">
-            <Text className="text-3xl font-bold text-gray-900">Welcome</Text>
+            <Text className="text-3xl font-bold text-foodie-y-800">
+              Welcome
+            </Text>
             <Text className="text-lg text-gray-600 text-center">
-              Share food, reduce waste, build community
+              Share items, reduce waste, build your community
             </Text>
           </VStack>
 
-          <Text>{location?.coords.latitude ?? ""} </Text>
-          <Text> {location?.coords.longitude ?? ""}</Text>
+          <Text className="text-8xl p-3 items-center justify-center animate-wave">
+            👋
+          </Text>
+
+          {/* <Text>{location?.coords.latitude ?? ""} </Text>
+          <Text> {location?.coords.longitude ?? ""}</Text> */}
 
           {!!errorMsg && (
             <Center className="gap-2">
@@ -74,7 +80,7 @@ export default function IndexScreen() {
 
           <Button
             size="lg"
-            className="w-full bg-blue-600 rounded-xl 
+            className="w-full bg-foodie-y-600 rounded-xl 
             disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
   hover:bg-blue-700 disabled:hover:bg-gray-300
   "

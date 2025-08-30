@@ -1,10 +1,10 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { View, Text, Platform } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router";
+import React from "react";
+import { View, Text, Platform } from "react-native";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import TabBarBackground from "@/components/ui/TabBarBackground";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { HapticTab } from "@/components/react-native/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
@@ -12,64 +12,31 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#AF7E00",
+        tabBarActiveTintColor: "#E1A200",
         headerShown: false,
-        tabBarShowLabel: false, 
         tabBarStyle: {
-          height: 85,
-          paddingTop: 8,
-          paddingBottom: 6,
-          ...Platform.select({
-            ios: { position: 'absolute' },
-            default: {},
-          }),
+          height: 90,
+          paddingTop: 10,
+          paddingBottom: 10,
+          // ...Platform.select({
+          //   ios: { position: 'absolute' },
+          //   default: {},
+          // }),
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: -3, // shadow above the tab bar
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 5, // Android shadow
         },
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
       }}
     >
-      {/*Give*/}
-      {/* <Tabs.Screen
-        name="index"
-        options={{
-          tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Ionicons
-                name={focused ? 'heart' : 'heart-outline'}
-                size={(size ?? 28) + 6}
-                color={color as string}
-              />
-              <Text
-                style={{
-                  color,
-                  fontSize: 12,
-                  marginTop: 4,
-                  fontWeight: focused ? '700' : '500',
-                }}
-              >
-                Give
-              </Text>
-            </View>
-        tabBarStyle: Platform.select({
-          ios: {
-            position: "absolute",
-            paddingTop: 8,
-            height: 90,
-          },
-          default: {
-            paddingTop: 20,
-          },
-        }),
-        sceneStyle: {
-          flex: 1,
-          // height: "100%",
-          // paddingHorizontal: 20,
-          // paddingTop: 20,
-        },
-      }}
-    > */}
       <Tabs.Screen
-        name="index"
+        name="receive"
         options={{
           title: "Receive",
           tabBarIcon: ({ color }) => (
@@ -80,25 +47,37 @@ export default function TabLayout() {
 
       {/*Profile*/}
       <Tabs.Screen
-        name="profile"
+        name="index"
         options={{
-          tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Ionicons
-                name={focused ? 'person' : 'person-outline'}
-                size={(size ?? 28) + 6}
-                color={color as string}
-              />
-              <Text
-                style={{
-                  color,
-                  fontSize: 12,
-                  marginTop: 4,
-                  fontWeight: focused ? '700' : '500',
-                }}
-              >
-                Profile
-              </Text>
+          title: "Profile",
+          tabBarIcon: ({
+            color,
+            size,
+            focused,
+          }: {
+            color: string;
+            size: number;
+            focused: boolean;
+          }) => (
+            <View
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                backgroundColor: "#FEF7E6",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingBottom: 5,
+
+                // marginBottom: 20, // "float" effect
+                shadowColor: "#000",
+                shadowOpacity: 0.2,
+                shadowOffset: { width: 0, height: 2 },
+                shadowRadius: 4,
+                elevation: 5,
+              }}
+            >
+              <Ionicons name="person" size={28} color={color} />
             </View>
           ),
         }}
@@ -108,34 +87,35 @@ export default function TabLayout() {
       <Tabs.Screen
         name="give"
         options={{
-          // tabBarIcon: ({ color, size, focused }: { color: string; size: number; focused: boolean }) => (
-          //   <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          //     <FontAwesome5
-          //       name="hands"
-          //       size={(size ?? 28) + 6}
-          //       color={color as string}
-          //     />
-          //     <Text
-          //       style={{
-          //         color,
-          //         fontSize: 12,
-          //         marginTop: 4,
-          //         fontWeight: focused ? '700' : '500',
-          //       }}
-          //     >
-          //       Receive
-          //     </Text>
-          //   </View>
-
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          title: "Give",
+          tabBarIcon: ({
+            color,
+            size,
+            focused,
+          }: {
+            color: string;
+            size: number;
+            focused: boolean;
+          }) => (
+            <View>
+              <Ionicons
+                // name={focused ? 'person' : 'person-outline'}
+                name="gift"
+                size={28}
+                color={color}
+                style={{
+                  paddingBottom: 3,
+                }}
+              />
+            </View>
           ),
         }}
+
+        // tabBarIcon: ({ color }) => (
+        //   <IconSymbol size={28} name="paperplane.fill" color={color} />
+        // ),
+        // }}
       />
     </Tabs>
   );
 }
-
-
-
-
