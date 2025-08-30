@@ -1,12 +1,19 @@
 // app/index.tsx
 import React, { useState, useEffect } from "react";
-import { StyleSheet, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
 import * as Location from "expo-location";
+import { Link, LinkText } from "@/components/ui/link";
+import { isValidCoordinates } from "../functions/map";
 
 export default function IndexScreen() {
   const router = useRouter();
@@ -14,7 +21,6 @@ export default function IndexScreen() {
     null
   );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [status, requestPermission] = Location.useForegroundPermissions();
 
   // get current permissions to access location here, for child page
   const handleLogin = () => {
@@ -29,9 +35,17 @@ export default function IndexScreen() {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log(location);
     setLocation(location);
-    router.push("/(tabs)");
+
+    if (isValidCoordinates(location)) {
+      router.push({
+        pathname: "/(tabs)",
+        params: {
+          lat: location?.coords.latitude?.toString(), // must pass as string
+          long: location?.coords.longitude?.toString(), // must pass as string
+        },
+      });
+    }
   }
 
   return (
@@ -45,9 +59,14 @@ export default function IndexScreen() {
             </Text>
           </VStack>
 
-          <Text>{location?.coords.latitude ?? ""} </Text>
-
-          <Text> {location?.coords.longitude ?? ""}</Text>
+          {!!errorMsg && (
+            <Center className="gap-2">
+              <Text>{errorMsg}</Text>
+              <TouchableOpacity onPress={() => Linking.openSettings()}>
+                <LinkText>Go to settings to enable</LinkText>
+              </TouchableOpacity>
+            </Center>
+          )}
 
           <Button
             size="lg"
@@ -58,7 +77,7 @@ export default function IndexScreen() {
             onPress={handleLogin}
             disabled={!!errorMsg}
           >
-            <Text className="text-white">Login</Text>
+            <ButtonText>Login</ButtonText>
           </Button>
         </VStack>
       </Center>
