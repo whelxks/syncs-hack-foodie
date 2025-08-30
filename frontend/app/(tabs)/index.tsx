@@ -1,23 +1,87 @@
 import { SearchBar } from "@/components/custom";
+import { Box } from "@/components/ui/box";
 import { Center } from "@/components/ui/center";
+import { HStack } from "@/components/ui/hstack";
 import {
   Slider,
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
 } from "@/components/ui/slider";
-import { Category, Condition } from "@/constants/Enums";
+import {
+  Category,
+  CategoryColour,
+  CategoryEmoji,
+  Condition,
+} from "@/constants/Enums";
 import { ItemSchema } from "@/types/item";
 import { useLocalSearchParams } from "expo-router";
 import { createRef, useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import MapView, {
   AnimatedRegion,
+  Callout,
   Circle,
   Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
 import { toNumber5DP } from "../../functions/map";
+
+const hexToRgba = (hex: string, alpha: number) => {
+  const cleanHex = hex.replace("#", "");
+  const r = parseInt(cleanHex.substring(0, 2), 16);
+  const g = parseInt(cleanHex.substring(2, 4), 16);
+  const b = parseInt(cleanHex.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
+const MarkerComponent = (
+  latNum: number,
+  longNum: number,
+  colour: string,
+  emoji: string,
+  key: string,
+  title: string,
+  description: string
+) => {
+  return (
+    <Marker
+      key={key}
+      id={key}
+      identifier={key}
+      coordinate={{ latitude: latNum, longitude: longNum }}
+      anchor={{ x: 0.5, y: 1 }}
+    >
+      <Callout
+        className="flex relative"
+        tooltip={false}
+        onPress={() => console.log("vieew more details???")}
+      >
+        <View
+          style={{
+            width: 300,
+            padding: 10,
+            backgroundColor: "#fff",
+          }}
+        >
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 8 }}>
+            {title}
+          </Text>
+          <Text style={{ fontSize: 16, marginBottom: 8 }}>{description}</Text>
+        </View>
+      </Callout>
+
+      <View
+        style={[
+          styles.customMarker,
+          { borderColor: colour, backgroundColor: hexToRgba(colour, 0.5) },
+        ]}
+      >
+        <Text style={styles.markerText}>{emoji}</Text>
+      </View>
+    </Marker>
+  );
+};
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -116,16 +180,17 @@ export default function ReceiveScreen() {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         }}
-        // showsUserLocation
+        showsUserLocation
         showsMyLocationButton
         style={styles.map}
       >
-        {itemArr.map((marker, index) => (
-          <Marker
+        {itemArr.map((marker, index) =>
+          /*<Marker
             key={marker.id}
-            // id={marker.id}
-            // identifier={marker.id}
-            pinColor="blue"
+            id={marker.id}
+            identifier={marker.id}
+            pinColor={CategoryColour[marker.category]}
+            icon={ CategoryEmoji[marker.category]}
             coordinate={{
               latitude: marker.location.lat,
               longitude: marker.location.long,
@@ -133,11 +198,20 @@ export default function ReceiveScreen() {
             title={marker.title}
             description={marker.description}
             //anchor={{ x: 0.5, y: 1 }}
-          />
-        ))}
+          />*/
+          MarkerComponent(
+            marker.location.lat,
+            marker.location.long,
+            CategoryColour[marker.category],
+            CategoryEmoji[marker.category],
+            marker.id,
+            marker.title,
+            marker.description
+          )
+        )}
 
         {/* this is your location */}
-        <Marker
+        {/* <Marker
           key={`user_location-${latNum}-${longNum}`}
           coordinate={{ latitude: latNum, longitude: longNum }}
           title={"This is your location"}
@@ -146,20 +220,18 @@ export default function ReceiveScreen() {
           <View style={styles.customMarker}>
             <Text style={styles.markerText}>🧑🏻</Text>
           </View>
-        </Marker>
+        </Marker> */}
 
         {/* who is within me */}
         <Circle
           center={{ latitude: latNum, longitude: longNum }}
           radius={radius} // in m
-          strokeColor="#684B00"
+          strokeColor="rgb(100, 100, 100)"
           strokeWidth={3}
-          fillColor="rgba(104, 75, 0, 0.3)"
+          fillColor="rgba(192, 192, 192, 0.3)"
         />
       </MapView>
-
       <SearchBar onSearch={onSearch} />
-
       <Center className="flex flex-row gap-5 h-[150px] absolute top-28 left-5 right-5">
         <Slider
           defaultValue={1000}
@@ -171,15 +243,32 @@ export default function ReceiveScreen() {
           isReversed={false}
           onChange={(value) => setRadius(value)}
           step={100}
-          className='w-[70%]'
+          className="w-[70%]"
         >
           <SliderTrack>
-            <SliderFilledTrack className="bg-foodie-y-900" />
+            <SliderFilledTrack className="bg-[#646464]" />
           </SliderTrack>
-          <SliderThumb />
+          <SliderThumb className="bg-[#646464]" />
         </Slider>
-        <Text className="text-foogie-y-900 text-xl font-bold">{radius}m</Text>
+        <Text className="text-[#646464] text-xl font-bold">{radius}m</Text>
       </Center>
+      ;
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <HStack
+          space="md"
+          reversed={false}
+          className="absolute top-30 left-5 right-5"
+        >
+          {Object.values(Category).map((category) => (
+            <Box
+              className={`text-sm bg-${CategoryColour[category]} p-3 rounded-full`}
+              key={category}
+            >
+              <Text className="text-white font-medium">{category}</Text>
+            </Box>
+          ))}
+        </HStack>
+      </ScrollView>
     </View>
   );
 }
