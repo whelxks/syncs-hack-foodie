@@ -95,6 +95,7 @@ export default function ReceiveScreen() {
   const mapRef = createRef<MapView | null>();
   const [itemArr, setItemArr] = useState<ItemSchema[]>([]);
   const initialItemsRef = useRef<ItemSchema[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const ini = [
@@ -148,6 +149,28 @@ export default function ReceiveScreen() {
     // );
 
     // setItemArr(() => filteredItems);
+  };
+
+  const onFilter = (category: Category) => {
+    // const newSelected = selectedCategories.includes(category)
+    //   ? selectedCategories.filter((c) => c !== category)
+    //   : [...selectedCategories, category];
+
+    const newCat = (prev: Category[]) => {
+      if (prev.includes(category)) {
+        return prev.filter((c) => c !== category);
+      } else {
+        return [...prev, category];
+      }
+    };
+
+    setSelectedCategories((prev) => newCat(prev));
+    setItemArr((prev) => {
+      const filteredItems = initialItemsRef.current.filter((item) =>
+        newCat(selectedCategories).includes(item.category)
+      );
+      return filteredItems;
+    });
   };
 
   return (
@@ -239,7 +262,6 @@ export default function ReceiveScreen() {
         horizontal
         showsHorizontalScrollIndicator={false}
         className="absolute top-[220] left-5 right-5 h-fit"
-  
       >
         {/* <Text className="text-lg text-black font-bold">Categories:</Text> */}
         <HStack space="md">
@@ -256,7 +278,12 @@ export default function ReceiveScreen() {
                 alignItems: "center",
               }}
             >
-              <Text className="text-white font-bold">{category}</Text>
+              <Text
+                className="text-white font-bold"
+                onPress={() => onFilter(category)}
+              >
+                {category}
+              </Text>
             </Box>
           ))}
         </HStack>
