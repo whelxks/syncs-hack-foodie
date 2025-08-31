@@ -16,15 +16,25 @@ import {
 } from "@/constants/Enums";
 import { ItemSchema } from "@/types/item";
 import { useLocalSearchParams } from "expo-router";
-import { createRef, useEffect, useRef, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import { createRef, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Dimensions,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import MapView, {
   Callout,
   Circle,
   Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
-import { toNumber5DP } from "../../functions/map";
+import { isValidCoordinates, toNumber5DP } from "../../functions/map";
+import * as Location from "expo-location";
+import { LinkText } from "@/components/ui/link";
 
 const hexToRgba = (hex: string, alpha: number) => {
   const cleanHex = hex.replace("#", "");
@@ -88,9 +98,19 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function ReceiveScreen() {
   const [radius, setRadius] = useState<number>(500);
-  const { lat, long } = useLocalSearchParams<{ lat: string; long: string }>();
-  const latNum = toNumber5DP(lat);
-  const longNum = toNumber5DP(long);
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null
+  );
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const latNum = useMemo(
+    () => toNumber5DP(location?.coords.latitude ?? 0),
+    [location]
+  );
+  const longNum = useMemo(
+    () => toNumber5DP(location?.coords.longitude ?? 0),
+    [location]
+  );
 
   const mapRef = createRef<MapView | null>();
   const [itemArr, setItemArr] = useState<ItemSchema[]>([]);
@@ -100,44 +120,78 @@ export default function ReceiveScreen() {
   );
 
   useEffect(() => {
-    const ini = [
-      {
-        id: "1",
-        title: "hihi",
-        category: Category.FOOD_AND_DRINKS,
-        condition: Condition.NEW,
-        description: "hihi",
-        reserved: false,
-        address: "",
-        location: { lat: latNum + 0.003, long: longNum + 0.003 },
-      },
-      {
-        id: "2",
-        title: "aaaaa",
-        category: Category.EDUCATION,
-        condition: Condition.NEW,
-        description: "aaaa",
-        reserved: false,
-        address: "",
-        location: { lat: latNum + 0.005, long: longNum + 0.005 },
-      },
-      {
-        id: "3",
-        title: "bbbb",
-        category: Category.ELECTRONICS,
-        condition: Condition.NEW,
-        description: "bbbb",
-        reserved: false,
-        address: "",
-        location: { lat: latNum + 0.001, long: longNum + 0.004 },
-      },
-    ];
+    // request perms
+    const reqPerms = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
 
-    // call for db for all items
-    // optimise next time: pass in params as user scrolls for pagination type query
-    initialItemsRef.current = ini; // permanent copy
-    setItemArr(ini);
-  }, [latNum, longNum]);
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    };
+
+    reqPerms(); // Call the async function
+  }, []);
+
+  useEffect(() => {
+    if (isValidCoordinates(location) && mapRef.current) {
+      // populate
+      const ini = [
+        {
+          id: "1",
+          title: "hihi",
+          category: Category.FOOD_AND_DRINKS,
+          condition: Condition.NEW,
+          description: "hihi",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.003, long: longNum + 0.003 },
+        },
+        {
+          id: "2",
+          title: "aaaaa",
+          category: Category.EDUCATION,
+          condition: Condition.NEW,
+          description: "aaaa",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.005, long: longNum + 0.005 },
+        },
+        {
+          id: "3",
+          title: "bbbb",
+          category: Category.ELECTRONICS,
+          condition: Condition.NEW,
+          description: "bbbb",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.001, long: longNum + 0.004 },
+        },
+      ];
+
+      // call for db for all items
+      // optimise next time: pass in params as user scrolls for pagination type query
+      initialItemsRef.current = ini; // permanent copy
+      setItemArr(ini);
+
+      mapRef.current.animateToRegion(
+        {
+          latitude: latNum,
+          longitude: longNum,
+          // reference from: https://stackoverflow.com/questions/36685372/how-to-zoom-in-out-in-react-native-map/36688156#36688156
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+        1000 // Animation duration in milliseconds
+      );
+    }
+  }, [location]);
+
+  useEffect(() => {
+    console.log(itemArr);
+  }, [itemArr]);
 
   const onSearch = (str: string) => {
     if (!str.trim()) {
@@ -294,7 +348,6 @@ export default function ReceiveScreen() {
                   fontWeight: "bold",
                 }}
                 onPress={() => {
-                  console.log(`text-[${CategoryColour[category]}]`);
                   onFilter(category);
                 }}
               >
@@ -304,6 +357,15 @@ export default function ReceiveScreen() {
           ))}
         </HStack>
       </ScrollView>
+
+      {!!errorMsg && (
+        <Center className="gap-2 absolute bottom-28 left-5 right-5 bg-white p-5 rounded-lg">
+          <Text>{errorMsg}</Text>
+          <TouchableOpacity onPress={() => Linking.openSettings()}>
+            <LinkText>Go to settings to enable</LinkText>
+          </TouchableOpacity>
+        </Center>
+      )}
     </View>
   );
 }

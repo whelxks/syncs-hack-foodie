@@ -24,18 +24,16 @@ export const kMToLongitudes = (km: number, atLatitude: number) => {
   return (km * 0.0089831) / Math.cos(degreesToRadians(atLatitude));
 };
 
-export const isValidCoordinates = (location: LocationObject) => {
+export const isValidCoordinates = (location: LocationObject | null) => {
   return (
-    location.coords &&
-    typeof location.coords.latitude === "number" &&
-    typeof location.coords.longitude === "number" &&
-    !isNaN(location.coords.latitude) &&
-    !isNaN(location.coords.longitude)
+    location?.coords &&
+    typeof location?.coords.latitude === "number" &&
+    typeof location?.coords.longitude === "number" &&
+    !isNaN(location?.coords.latitude) &&
+    !isNaN(location?.coords.longitude)
   );
 };
 
-export const toNumber5DP = (str: string) => {
-  const num = Number(str);
-  if (isNaN(num)) return 0; // fallback for invalid strings
-  return Math.round(num * 1e5) / 1e5; // round to 5 decimal places
+export const toNumber5DP = (number: number) => {
+  return Number.parseFloat(number.toFixed(5)); // 3.14159
 }

@@ -3,7 +3,7 @@ import { Center } from "@/components/ui/center";
 import { LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import * as Location from "expo-location";
+
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -12,40 +12,20 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { isValidCoordinates } from "../functions/map";
 
 export default function IndexScreen() {
   const router = useRouter();
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
-  );
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // get current permissions to access location here, for child page
   const handleLogin = () => {
-    getCurrentLocationAndProceed();
+    router.push({
+      pathname: "/(tabs)",
+      // params: {
+      //   lat: location?.coords.latitude?.toString(), // must pass as string
+      //   long: location?.coords.longitude?.toString(), // must pass as string
+      // },
+    });
   };
-
-  async function getCurrentLocationAndProceed() {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation(location);
-
-    if (isValidCoordinates(location)) {
-      router.push({
-        pathname: "/(tabs)",
-        params: {
-          lat: location?.coords.latitude?.toString(), // must pass as string
-          long: location?.coords.longitude?.toString(), // must pass as string
-        },
-      });
-    }
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,15 +47,6 @@ export default function IndexScreen() {
           {/* <Text>{location?.coords.latitude ?? ""} </Text>
           <Text> {location?.coords.longitude ?? ""}</Text> */}
 
-          {!!errorMsg && (
-            <Center className="gap-2">
-              <Text>{errorMsg}</Text>
-              <TouchableOpacity onPress={() => Linking.openSettings()}>
-                <LinkText>Go to settings to enable</LinkText>
-              </TouchableOpacity>
-            </Center>
-          )}
-
           {/* <GoogleSignIn /> */}
 
           <Button
@@ -85,7 +56,7 @@ export default function IndexScreen() {
   hover:bg-blue-700 disabled:hover:bg-gray-300
   "
             onPress={handleLogin}
-            disabled={!!errorMsg}
+            // disabled={!!errorMsg}
           >
             <ButtonText>Login</ButtonText>
           </Button>
