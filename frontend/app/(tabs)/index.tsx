@@ -24,7 +24,7 @@ const user = {
 let fakeItems = [
   {
     id: "1",
-    title: "Red Mug",
+    title: "Owala Color Drop Insulated Water Bottle",
     category: "Others",
     condition: "New",
     description:
@@ -121,6 +121,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 64,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f8f9fa",
