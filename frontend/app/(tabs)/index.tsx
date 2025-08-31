@@ -16,7 +16,7 @@ const user = {
 const fakeItems = [
   {
     id: "1",
-    title: "Red Mug",
+    title: "Owala Color Drop Insulated Water Bottle",
     category: "Others",
     condition: "New",
     description: "Brand new Owala Color Drop insulated water bottle, still sealed in its original packaging. This 40 oz (1185 mL) bottle is leak-proof and features a convenient built-in straw. It is designed to keep drinks cold for up to 24 hours. Perfect for staying hydrated on the go, at the gym, or for daily use.",
@@ -87,6 +87,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 64,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f8f9fa",
