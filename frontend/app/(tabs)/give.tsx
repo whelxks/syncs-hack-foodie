@@ -31,7 +31,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 export default function GiveScreen() {
   const params = useLocalSearchParams();
   const previousScreen = params.previousScreen;
-  console.log(params, previousScreen);
 
   const [formData, setFormData] = useState({
     title: "",

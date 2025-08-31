@@ -37,3 +37,13 @@ export const isValidCoordinates = (location: LocationObject | null) => {
 export const toNumber5DP = (number: number) => {
   return Number.parseFloat(number.toFixed(5)); // 3.14159
 }
+
+// Convert zoom level to delta values
+export const getLatitudeDelta = (zoomLevel: number) => {
+  return 360 / Math.pow(2, zoomLevel);
+};
+
+export const getLongitudeDelta = (zoomLevel: number, latitude: number) => {
+  const latRad = latitude * (Math.PI / 180);
+  return (360 / Math.pow(2, zoomLevel)) * Math.cos(latRad);
+};

@@ -32,9 +32,15 @@ import MapView, {
   Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
-import { isValidCoordinates, toNumber5DP } from "../../functions/map";
+import {
+  getLatitudeDelta,
+  getLongitudeDelta,
+  isValidCoordinates,
+  toNumber5DP,
+} from "../../functions/map";
 import * as Location from "expo-location";
 import { LinkText } from "@/components/ui/link";
+import { Button, ButtonText } from "@/components/ui/button";
 
 const hexToRgba = (hex: string, alpha: number) => {
   const cleanHex = hex.replace("#", "");
@@ -76,6 +82,10 @@ const MarkerComponent = (
             {title}
           </Text>
           <Text style={{ fontSize: 16, marginBottom: 8 }}>{description}</Text>
+
+          <Button onPress={() => console.log("reserve")}>
+            <ButtonText>Reserve</ButtonText>
+          </Button>
         </View>
       </Callout>
 
@@ -141,33 +151,123 @@ export default function ReceiveScreen() {
       const ini = [
         {
           id: "1",
-          title: "hihi",
+          title: "Coke",
           category: Category.FOOD_AND_DRINKS,
           condition: Condition.NEW,
-          description: "hihi",
+          description: "I cannot finish",
           reserved: false,
           address: "",
           location: { lat: latNum + 0.003, long: longNum + 0.003 },
         },
         {
           id: "2",
-          title: "aaaaa",
+          title: "Books",
           category: Category.EDUCATION,
           condition: Condition.NEW,
-          description: "aaaa",
+          description: "It is too heavy to bring back",
           reserved: false,
           address: "",
           location: { lat: latNum + 0.005, long: longNum + 0.005 },
         },
         {
           id: "3",
-          title: "bbbb",
+          title: "Monitor",
           category: Category.ELECTRONICS,
+          condition: Condition.NEW,
+          description: "Too bulky",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.001, long: longNum + 0.004 },
+        },
+        {
+          id: "4",
+          title: "Pasta",
+          category: Category.FOOD_AND_DRINKS,
+          condition: Condition.NEW,
+          description: "Too much",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.003333, long: longNum - 0.013 },
+        },
+        {
+          id: "5",
+          title: "Old pants",
+          category: Category.FASHION,
+          condition: Condition.NEW,
+          description: "Please upcycle",
+          reserved: false,
+          address: "",
+          location: { lat: latNum - 0.005, long: longNum - 0.005 },
+        },
+        {
+          id: "6",
+          title: "bbbb",
+          category: Category.FASHION,
           condition: Condition.NEW,
           description: "bbbb",
           reserved: false,
           address: "",
-          location: { lat: latNum + 0.001, long: longNum + 0.004 },
+          location: { lat: latNum - 0.00999999999, long: longNum - 0.009 },
+        },
+        {
+          id: "7",
+          title: "Bread",
+          category: Category.FOOD_AND_DRINKS,
+          condition: Condition.NEW,
+          description: "Bulk deal",
+          reserved: false,
+          address: "",
+          location: { lat: latNum - 0.01231, long: longNum - 0.023123 },
+        },
+        {
+          id: "8",
+          title: "Old dictionary",
+          category: Category.EDUCATION,
+          condition: Condition.WELL_USED,
+          description: "Chinese",
+          reserved: false,
+          address: "",
+          location: { lat: latNum - 0.0085, long: longNum + 0.0095 },
+        },
+        {
+          id: "9",
+          title: "Old Gaming mouse",
+          category: Category.ELECTRONICS,
+          condition: Condition.NEW,
+          description: "Works super well",
+          reserved: false,
+          address: "",
+          location: { lat: latNum - 0.022921, long: longNum - 0.004 },
+        },
+        {
+          id: "10",
+          title: "Flowers",
+          category: Category.OTHERS,
+          condition: Condition.NEW,
+          description: "I cannot have these plants anymore",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.0163, long: longNum + 0.003 },
+        },
+        {
+          id: "11",
+          title: "Chair",
+          category: Category.FURNITURE,
+          condition: Condition.NEW,
+          description: "i am moving out",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.0011, long: longNum + 0.00545 },
+        },
+        {
+          id: "12",
+          title: "Peanut Butter",
+          category: Category.FOOD_AND_DRINKS,
+          condition: Condition.NEW,
+          description: "I cannot finish this item",
+          reserved: false,
+          address: "",
+          location: { lat: latNum + 0.005, long: longNum + 0.0007 },
         },
       ];
 
@@ -189,15 +289,16 @@ export default function ReceiveScreen() {
     }
   }, [location]);
 
-  useEffect(() => {
-    console.log(itemArr);
-  }, [itemArr]);
+  //   useEffect(() => {
+  //     console.log(itemArr);
+  //   }, [itemArr]);
 
   const onSearch = (str: string) => {
     if (!str.trim()) {
       setItemArr(initialItemsRef.current);
       return;
     }
+
 
     // const strUpperCase = str.toUpperCase();
     // const filteredItems = initialItemsRef.current.filter((item) =>
